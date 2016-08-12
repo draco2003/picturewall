@@ -47,33 +47,28 @@ app.get('/remote', function(req, res) {
 io.on('connection', function(socket) {
   if (socket.handshake.headers.referer.indexOf(config.dashboardEndpoint) > -1) {
     socket.join('remote');
-    io.emit('updated-screens', screenDetails());
+    io.emit('remote-screens', screenDetails());
   } else {
     socket.on('screen-settings', function(data) {
       screen_id = standardizeId(data.room, data.name);
       data.id = socket.id;
       socketScreenMap[socket.id] = screen_id;
       screenData[screen_id] = data;
-      io.in('remote').emit('updated-screens', screenDetails());
+      io.in('remote').emit('remote-screens', screenDetails());
       socket.emit('slideshow-images', images);
     });
   }
 
+  // Slideshow Controls
   socket.on('remote-action', function(data) {
     io.to(data.client).emit('slideshow-control', data.action);
   }); 
-
-  // Slideshow Controls
-  socket.on('screen-control', function(data) {
-    io.emit('screen-details', screenData());
-  });
-
 
   socket.on('disconnect', function() {
     // On Disconnect remove screen from available list
     delete screenData[socketScreenMap[socket.id]];
     delete socketScreenMap[socket.id];
-    io.emit('updated-screens', screenDetails());
+    io.emit('remote-screens', screenDetails());
   });
 });
 

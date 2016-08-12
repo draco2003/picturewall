@@ -1,14 +1,11 @@
 var socket = io();
 
 $(document).on('click','.action-btn', function(event) { 
-    console.log('Button CLicked');
-    socket.emit('remote-action', { 
-      client: this.dataset.id,
-      action: this.dataset.action
-    })
-    console.log(this.dataset.id);
-    console.log(this.dataset.action);
-})
+  socket.emit('remote-action', { 
+    client: this.dataset.id,
+    action: this.dataset.action
+  });
+});
 
 var vm = new Vue({
   el: '#app',
@@ -19,7 +16,7 @@ var vm = new Vue({
 		activeUsers: 0
   },
   created: function() {
-    socket.on('updated-screens', function(data) {
+    socket.on('remote-screens', function(data) {
       screens = [];
       screenCount = 1;
       for (screen in data.screens) {
