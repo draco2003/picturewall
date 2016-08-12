@@ -10,6 +10,9 @@ var config = require('./config.js');
 
 // the object that will hold information about the active screens currently
 var screenData = {};
+// This is a mapping between sockets and screens for easy lookup
+var socketScreenMap = {};
+
 var images = [{
           "src": '/img/1.jpg',
           'thumb': '/img/thumb-1.jpg',
@@ -47,9 +50,10 @@ io.on('connection', function(socket) {
     io.emit('updated-screens', screenDetails());
   } else {
     socket.on('screen-settings', function(data) {
-      user_id = standardizeId(data.room, data.name);
+      screen_id = standardizeId(data.room, data.name);
       data.id = socket.id;
-      screenData[user_id] = data;
+      socketScreenMap[socket.id] = screen_id;
+      screenData[screen_id] = data;
       io.in('remote').emit('updated-screens', screenDetails());
       socket.emit('slideshow-images', images);
     });
@@ -66,13 +70,16 @@ io.on('connection', function(socket) {
 
 
   socket.on('disconnect', function() {
+    // On Disconnect remove screen from available list
+    delete screenData[socketScreenMap[socket.id]];
+    delete socketScreenMap[socket.id];
     io.emit('updated-screens', screenDetails());
   });
 });
 
 function standardizeId(room, name) {
-  user_id = room + ':' + name;
-  return user_id.replace(" ","_");
+  screen_id = room + ':' + name;
+  return screen_id.replace(" ","_");
 }
 
 function screenDetails() {
