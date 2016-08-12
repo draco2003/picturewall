@@ -1,0 +1,24 @@
+{
+  "name": "picturewall",
+  "version": "0.0.1",
+  "description": "Digital photo frame that supports remote control and multiple frames.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "socketio",
+    "vue.js",
+    "real-time",
+    "analytics"
+  ],
+  "author": "Dan Rowe",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.13.4",
+    "jquery": "^3.1.0",
+    "socket.io": "^1.4.5"
+  }
+}

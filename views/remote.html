@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picture Wall Remote Control</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/js.cookie.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Picture Wall</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div id="app">
+      <div class="row">
+        <div >
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <td>Room</td>
+                <td>Name</td>
+                <td>Slideshow</td>
+                <td>Control</td>
+              </thead>
+              <tbody>
+                <tr v-for="(userid, data) in screens">
+                  <td>{{ data.room }}</td>
+                  <td>{{ data.name }}</td>
+                  <td>{{ data.slideshow }}</td>
+                  <td>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#{{data.htmlId}}">
+                      <span class="glyphicon glyphicon-modal-window" aria-hidden="true"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <!-- Button trigger modal -->
+      <div v-for="(userid, data) in screens">
+        <!-- Modal --> 
+        <div class="modal fade" id="{{data.htmlId}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Screen Settings</h4>
+              </div>
+              <div class="modal-body">
+              <form id="settingsForm">
+                <div class="btn-group" role="group" aria-label="...">
+                  <button id="{{data.htmlId}}-refresh" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-backward" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="backward"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-play" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="play"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-pause" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="pause"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-forward" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="forward"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
+                </div>
+              <div class="form-group">
+                <label for="exampleInputRoom">Room</label>
+                <select id="room" name="room" class="form-control">
+                <option value="living_room">Living Room</option>
+                <option value="family_room">Family Room</option>
+              </select>
+              </div>          
+              <div class="form-group">
+                <label for="exampleInputScreenName">Screen Name</label>
+                <input id="name" name="name" type="text" class="form-control" id="exampleInputScreenName" placeholder="Screen Name" value="{{data.name}}">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputScreenName">Slideshow</label>
+                <select id="slideshow" name="slideshow" class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+              </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/vue.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+Digital photo frame that supports remote control and multiple frames.

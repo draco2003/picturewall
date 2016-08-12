@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Picture Wall</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="/css/main.css"> -->
+
+  <link rel="stylesheet" href="/css/lightgallery.css">
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/js.cookie.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  </style>
+</head>
+
+<body>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#settingsModal">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Screen Settings</h4>
+        </div>
+        <div class="modal-body">
+        <form id="settingsForm">
+        <div class="form-group">
+          <label for="exampleInputRoom">Room</label>
+          <select id="room" name="room" class="form-control">
+          <option value="living_room">Living Room</option>
+          <option value="family_room">Family Room</option>
+        </select>
+        </div>          
+        <div class="form-group">
+          <label for="exampleInputScreenName">Screen Name</label>
+          <input id="name" name="name" type="text" class="form-control" id="exampleInputScreenName" placeholder="Screen Name">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputScreenName">Slideshow</label>
+          <select id="slideshow" name="slideshow" class="form-control">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-success btn-lg mrb50" id="animated-thumbnails">Launch Gallery</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/lightgallery.min.js"></script>
+
+  <!-- lightgallery plugins     -->
+  <script src="/js/lg-autoplay.min.js"></script>
+  <script src="/js/lg-thumbnail.min.js"></script>
+  <script src="/js/lg-fullscreen.min.js"></script>
+  <script>
+    var cookieName = 'picturewall';
+    var settingsRaw = Cookies.get(cookieName);
+    var socket = io();
+    var galleryHandle = document.getElementById('animated-thumbnails');
+
+    if (typeof settingsRaw === "undefined") {
+      $('#settingsModal').modal('show');
+    } else {
+      settings = JSON.parse(settingsRaw);
+      socket.on('connect', function() {
+        // Let the Server know this screens settings
+        socket.emit('screen-settings', settings);
+      });
+    }
+
+    //Settings Form Handling
+    $( "#settingsForm" ).submit(function( event ) {
+      room = $("#room").val();
+      name = $("#name").val();
+      slideshow = $("#slideshow").val();
+      saveSettings(room, name, slideshow);
+      event.preventDefault();
+      $('#settingsModal').modal('hide');
+    }); 
+
+    socket.on('slideshow-control', function(data) {
+      slideShowControl(data);
+    });
+
+    socket.on('slideshow-images', function(data) {
+      loadGallery(data);
+    });
+
+    function saveSettings(room, name, slideshow) {
+      var cookieSettings = { room: room, name: name, slideshow: slideshow };
+      Cookies.set(cookieName, cookieSettings);
+      socket.emit('screen-settings', cookieSettings);
+    };
+
+    function loadGallery(images) {      
+      lightGallery(galleryHandle, {
+        thumbnail:true,
+        animateThumb: false,
+        showThumbByDefault: true,
+        download: false,
+        preload: 5,
+        dynamic: true,
+        dynamicEl: images
+      })
+    };
+
+    function reloadGallery(){
+      window.lgData[galleryHandle.getAttribute('lg-uid')].destroy(true);
+    } 
+
+    function slideShowControl(action) {
+      lghandle = window.lgData[galleryHandle.getAttribute('lg-uid')];
+      switch (action) {
+        case 'refresh':
+          lghandle.slide(0);
+          break;
+
+        case 'forward':
+          lghandle.goToNextSlide();
+          break;
+
+        case 'backward':
+          lghandle.goToPrevSlide();
+          break;
+
+        case 'play':
+          lghandle.startlAuto();
+          break;
+
+        case 'pause':
+          lghandle.cancelAuto();
+          break;
+      }
+    }
+
+  </script>
+
+</body>
+
+</html>
