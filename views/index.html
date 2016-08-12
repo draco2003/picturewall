@@ -62,7 +62,7 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-success btn-lg mrb50" id="animated-thumbnails">Launch Gallery</button>
+  <div id="animated-thumbnails"></div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/js/lightgallery.min.js"></script>
@@ -143,11 +143,11 @@
           break;
 
         case 'play':
-          lghandle.startlAuto();
+          lghandle.modules.autoplay.startlAuto();
           break;
 
         case 'pause':
-          lghandle.cancelAuto();
+          lghandle.modules.autoplay.cancelAuto();
           break;
       }
     }

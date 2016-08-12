@@ -64,26 +64,26 @@
               <div class="modal-body">
               <form id="settingsForm">
                 <div class="btn-group" role="group" aria-label="...">
-                  <button id="{{data.htmlId}}-refresh" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
-                  <button id="{{data.htmlId}}-backward" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="backward"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
-                  <button id="{{data.htmlId}}-play" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="play"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
-                  <button id="{{data.htmlId}}-pause" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="pause"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
-                  <button id="{{data.htmlId}}-forward" type="button" class="btn btn-default action-btn" data-id="{{data.id}}" data-action="forward"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-refresh" type="button" class="btn btn-default btn-lg action-btn" data-id="{{data.id}}" data-action="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-backward" type="button" class="btn btn-default btn-lg action-btn" data-id="{{data.id}}" data-action="backward"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-play" type="button" class="btn btn-default btn-lg action-btn" data-id="{{data.id}}" data-action="play"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-pause" type="button" class="btn btn-default btn-lg action-btn" data-id="{{data.id}}" data-action="pause"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+                  <button id="{{data.htmlId}}-forward" type="button" class="btn btn-default btn-lg action-btn" data-id="{{data.id}}" data-action="forward"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></button>
                 </div>
               <div class="form-group">
                 <label for="exampleInputRoom">Room</label>
-                <select id="room" name="room" class="form-control">
+                <select id="room" name="room" v-model="data.room" class="form-control">
                 <option value="living_room">Living Room</option>
                 <option value="family_room">Family Room</option>
               </select>
               </div>          
               <div class="form-group">
                 <label for="exampleInputScreenName">Screen Name</label>
-                <input id="name" name="name" type="text" class="form-control" id="exampleInputScreenName" placeholder="Screen Name" value="{{data.name}}">
+                <input id="name" name="name" type="text" class="form-control" id="exampleInputScreenName" placeholder="Screen Name" v-model="data.name">
               </div>
               <div class="form-group">
                 <label for="exampleInputScreenName">Slideshow</label>
-                <select id="slideshow" name="slideshow" class="form-control">
+                <select id="slideshow" name="slideshow"  v-model="data.slideshow" class="form-control">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
